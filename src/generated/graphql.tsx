@@ -16,8 +16,10 @@ export type Scalars = {
 };
 
 export type CreateUserInput = {
-  /** Example field (placeholder) */
-  exampleField: Scalars['Int'];
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type Mutation = {
@@ -44,37 +46,46 @@ export type MutationUpdateUserArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  currentUser: User;
   user: User;
   users: Array<User>;
 };
 
 
 export type QueryUserArgs = {
-  id: Scalars['Int'];
+  user: UpdateUserInput;
 };
 
 export type UpdateUserInput = {
-  /** Example field (placeholder) */
-  exampleField?: InputMaybe<Scalars['Int']>;
-  id: Scalars['Int'];
+  email?: InputMaybe<Scalars['String']>;
+  firstName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  lastName?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
 };
 
 export type User = {
   __typename?: 'User';
-  /** Example field (placeholder) */
-  exampleField: Scalars['Int'];
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  id: Scalars['ID'];
+  lastName: Scalars['String'];
+  password: Scalars['String'];
 };
 
-export type UserFieldsFragment = { __typename?: 'User', exampleField: number };
+export type UserFieldsFragment = { __typename?: 'User', id: string, email: string, firstName: string, lastName: string };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', exampleField: number }> };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string }> };
 
 export const UserFieldsFragmentDoc = gql`
     fragment UserFields on User {
-  exampleField
+  id
+  email
+  firstName
+  lastName
 }
     `;
 export const UsersDocument = gql`
