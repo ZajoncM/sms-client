@@ -1,17 +1,13 @@
 import { Button, Layout } from "antd";
 import { Header, Content } from "antd/lib/layout/layout";
-import { Navigate, useNavigate } from "react-router-dom";
-import { useUserContext } from "../../providers/UserProvider";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-  const currentUser = useUserContext();
   const navigate = useNavigate();
-
-  if (!currentUser) return <Navigate to="/" />;
 
   const logout = () => {
     localStorage.removeItem("token");
-    navigate("/");
+    navigate("/login");
   };
 
   return (
