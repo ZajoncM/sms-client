@@ -1,17 +1,19 @@
 import { Button, Card, Form, Input } from "antd";
+import { useNavigate } from "react-router-dom";
 import { api } from "../../../utils/axios";
 
 export const LoginForm = () => {
+  const navigate = useNavigate();
+
   const onFinish = async (values: any) => {
     const { data } = await api.post("/auth/login", values);
 
     localStorage.setItem("token", data.access_token);
-
-    console.log("Success:", data);
+    navigate("/dashboard");
   };
 
   return (
-    <Card title="Login" extra={<a href="#">Rejestracja --WIP--</a>}>
+    <Card title="Login">
       <Form
         name="basic"
         labelCol={{ span: 8 }}
