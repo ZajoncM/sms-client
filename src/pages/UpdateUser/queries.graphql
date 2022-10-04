@@ -1,0 +1,5 @@
+query user($user: UpdateUserInput!) {
+  user(user: $user) {
+    ...UserFields
+  }
+}
