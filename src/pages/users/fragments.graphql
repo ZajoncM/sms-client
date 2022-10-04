@@ -3,4 +3,5 @@ fragment UserFields on User {
   email
   firstName
   lastName
+  role
 }

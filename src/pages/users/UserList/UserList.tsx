@@ -28,7 +28,11 @@ const UserList = () => {
       dataIndex: "email",
       key: "email",
     },
-
+    {
+      title: "Rola",
+      dataIndex: "role",
+      key: "role",
+    },
     {
       title: "Action",
       key: "action",

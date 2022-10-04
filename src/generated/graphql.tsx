@@ -71,47 +71,55 @@ export type User = {
   id: Scalars['ID'];
   lastName: Scalars['String'];
   password: Scalars['String'];
+  role: UserRoleEnum;
 };
+
+export enum UserRoleEnum {
+  Admin = 'ADMIN',
+  Parent = 'PARENT',
+  Student = 'STUDENT',
+  Teacher = 'TEACHER'
+}
 
 export type CreateUserMutationVariables = Exact<{
   createUserInput: CreateUserInput;
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string } };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } };
 
 export type UpdateUserMutationVariables = Exact<{
   updateUserInput: UpdateUserInput;
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } };
 
 export type UserQueryVariables = Exact<{
   user: UpdateUserInput;
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string } };
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } };
 
-export type UserFieldsFragment = { __typename?: 'User', id: string, email: string, firstName: string, lastName: string };
+export type UserFieldsFragment = { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum };
 
 export type RemoveUserMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type RemoveUserMutation = { __typename?: 'Mutation', removeUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string } };
+export type RemoveUserMutation = { __typename?: 'Mutation', removeUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string }> };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string } };
+export type MeQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } };
 
 export const UserFieldsFragmentDoc = gql`
     fragment UserFields on User {
@@ -119,6 +127,7 @@ export const UserFieldsFragmentDoc = gql`
   email
   firstName
   lastName
+  role
 }
     `;
 export const CreateUserDocument = gql`

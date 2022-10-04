@@ -1,6 +1,8 @@
 import { UserOutlined, HomeOutlined } from "@ant-design/icons";
 import { Menu, MenuProps } from "antd";
 import { useNavigate } from "react-router-dom";
+import { UserRoleEnum } from "../../../generated/graphql";
+import { useUserContext } from "../../../providers/UserProvider";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -8,29 +10,37 @@ export const getItem = (
   label: React.ReactNode,
   key: React.Key,
   icon?: React.ReactNode,
+  roles?: UserRoleEnum[],
   children?: MenuItem[],
   type?: "group"
-): MenuItem => {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-  } as MenuItem;
-};
+) => ({
+  key,
+  icon,
+  children,
+  label,
+  type,
+  roles,
+});
 
-const items: MenuProps["items"] = [
+const allItems = [
   getItem("Kokpit", "dashboard", <HomeOutlined />),
-  getItem("Użytkownicy", "users", <UserOutlined />),
+  getItem("Użytkownicy", "users", <UserOutlined />, [UserRoleEnum.Admin]),
 ];
 
 const NavMenu = () => {
   const navigate = useNavigate();
-
+  const currentUser = useUserContext();
   const onClick: MenuProps["onClick"] = (e) => {
     navigate(`/${e.key}`);
   };
+
+  const items = allItems.filter(({ roles }) => {
+    if (!roles) return true;
+
+    if (!currentUser?.role) return false;
+
+    return roles.includes(currentUser?.role);
+  });
 
   return (
     <Menu
