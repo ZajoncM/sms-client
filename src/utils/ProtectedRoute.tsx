@@ -1,5 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useUserContext } from "../providers/UserProvider";
+import DashboardTemplate from "../templates/DashboardTemplate/DashboardTemplate";
 
 const ProtectedRoute = () => {
   const currentUser = useUserContext();
@@ -9,7 +10,11 @@ const ProtectedRoute = () => {
 
   if (location.pathname === "/") return <Navigate to="/dashboard" />;
 
-  return <Outlet />;
+  return (
+    <DashboardTemplate>
+      <Outlet />
+    </DashboardTemplate>
+  );
 };
 
 export default ProtectedRoute;

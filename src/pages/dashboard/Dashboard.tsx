@@ -1,7 +1,5 @@
-import DashboardTemplate from "../../templates/DashboardTemplate/DashboardTemplate";
-
 const Dashboard = () => {
-  return <DashboardTemplate>content</DashboardTemplate>;
+  return <div>content</div>;
 };
 
 export default Dashboard;
