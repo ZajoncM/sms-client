@@ -1,5 +1,10 @@
+import { PageHeader } from "antd";
+import { useUserContext } from "../../providers/UserProvider";
+
 const Dashboard = () => {
-  return <div>content</div>;
+  const user = useUserContext();
+
+  return <PageHeader title={`Witaj ${user?.firstName}`} />;
 };
 
 export default Dashboard;

@@ -15,10 +15,9 @@ export const LoginForm = () => {
   return (
     <Card title="Login">
       <Form
-        name="basic"
+        name="login"
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
-        initialValues={{ remember: true }}
         onFinish={onFinish}
         autoComplete="off"
       >
