@@ -37,11 +37,12 @@ const UserList = () => {
           <Button
             danger
             icon={<DeleteOutlined />}
-            onClick={() =>
+            onClick={(e) => {
+              e.stopPropagation();
               removeUser({
                 variables: { id: Number(user.id) },
-              })
-            }
+              });
+            }}
           />
         </Space>
       ),
