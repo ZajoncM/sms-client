@@ -1,8 +1,8 @@
 import { Input, Button, Form, Select } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import {
+  GroupFieldsFragment,
   UpdateGroupInput,
-  useGroupQuery,
   useStudentsQuery,
   useTeachersQuery,
   useUpdateGroupMutation,
@@ -10,7 +10,11 @@ import {
 
 const { Option } = Select;
 
-const UpdateUserForm = () => {
+type Props = {
+  group: GroupFieldsFragment;
+};
+
+const UpdateUserForm = ({ group }: Props) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [updateUser] = useUpdateGroupMutation({
@@ -20,10 +24,6 @@ const UpdateUserForm = () => {
   });
   const { data: teachersData, loading: teachersLoading } = useTeachersQuery();
   const { data: studentsData, loading: studentsLoading } = useStudentsQuery();
-
-  const { data, loading } = useGroupQuery({
-    variables: { id: Number(id) },
-  });
 
   const onFinish = (groupDto: UpdateGroupInput) => {
     const semester = Number(groupDto.semester);
@@ -36,10 +36,8 @@ const UpdateUserForm = () => {
     });
   };
 
-  if (loading) return <div>Loading...</div>;
-
-  const educatorId = data?.group.educator?.id;
-  const studentIds = data?.group.students.map(({ id }) => id);
+  const educatorId = group.educator?.id;
+  const studentIds = group.students.map(({ id }) => id);
 
   return (
     <Form
@@ -47,7 +45,7 @@ const UpdateUserForm = () => {
       labelCol={{ span: 2 }}
       wrapperCol={{ span: 8 }}
       onFinish={onFinish}
-      initialValues={{ ...data?.group, educatorId, studentIds }}
+      initialValues={{ ...group, educatorId, studentIds }}
     >
       <Form.Item
         label="Nazwa"

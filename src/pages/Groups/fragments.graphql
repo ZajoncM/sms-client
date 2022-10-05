@@ -14,4 +14,19 @@ fragment GroupFields on Group {
       ...UserFields
     }
   }
+
+  courses {
+    ...CourseFields
+  }
+}
+
+fragment CourseFields on Course {
+  id
+  name
+  teacher {
+    id
+    user {
+      ...UserFields
+    }
+  }
 }

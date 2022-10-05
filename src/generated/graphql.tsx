@@ -15,6 +15,20 @@ export type Scalars = {
   Float: number;
 };
 
+export type Course = {
+  __typename?: 'Course';
+  group: Group;
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  teacher?: Maybe<Teacher>;
+};
+
+export type CreateCourseInput = {
+  groupId: Scalars['String'];
+  name: Scalars['String'];
+  teacherId?: InputMaybe<Scalars['String']>;
+};
+
 export type CreateGroupInput = {
   educatorId: Scalars['String'];
   name: Scalars['String'];
@@ -32,6 +46,7 @@ export type CreateUserInput = {
 
 export type Group = {
   __typename?: 'Group';
+  courses: Array<Course>;
   educator?: Maybe<Teacher>;
   id: Scalars['ID'];
   name: Scalars['String'];
@@ -41,12 +56,19 @@ export type Group = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createCourse: Course;
   createGroup: Group;
   createUser: User;
+  removeCourse: Course;
   removeGroup: Group;
   removeUser: User;
   updateGroup: Group;
   updateUser: User;
+};
+
+
+export type MutationCreateCourseArgs = {
+  createCourseInput: CreateCourseInput;
 };
 
 
@@ -57,6 +79,11 @@ export type MutationCreateGroupArgs = {
 
 export type MutationCreateUserArgs = {
   createUserInput: CreateUserInput;
+};
+
+
+export type MutationRemoveCourseArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -86,11 +113,18 @@ export type Parent = {
 
 export type Query = {
   __typename?: 'Query';
+  course: Course;
+  courses: Array<Course>;
   currentUser: User;
   group: Group;
   groups: Array<Group>;
   user: User;
   users: Array<User>;
+};
+
+
+export type QueryCourseArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -117,6 +151,7 @@ export type Student = {
 
 export type Teacher = {
   __typename?: 'Teacher';
+  courses: Array<Course>;
   group: Group;
   id: Scalars['ID'];
   user: User;
@@ -159,7 +194,15 @@ export enum UserRoleEnum {
   Teacher = 'TEACHER'
 }
 
+export type CourseEntity = {
+  group: GroupEntity;
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  teacher?: InputMaybe<TeacherEntity>;
+};
+
 export type GroupEntity = {
+  courses: Array<CourseEntity>;
   educator?: InputMaybe<TeacherEntity>;
   id: Scalars['ID'];
   name: Scalars['String'];
@@ -178,6 +221,7 @@ export type StudentEntity = {
 };
 
 export type TeacherEntity = {
+  courses: Array<CourseEntity>;
   group: GroupEntity;
   id: Scalars['ID'];
   user: UserEntity;
@@ -202,6 +246,20 @@ export type CreateGroupMutationVariables = Exact<{
 
 export type CreateGroupMutation = { __typename?: 'Mutation', createGroup: { __typename?: 'Group', id: string } };
 
+export type CreateCourseMutationVariables = Exact<{
+  createCourseInput: CreateCourseInput;
+}>;
+
+
+export type CreateCourseMutation = { __typename?: 'Mutation', createCourse: { __typename?: 'Course', id: string } };
+
+export type RemoveCourseMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type RemoveCourseMutation = { __typename?: 'Mutation', removeCourse: { __typename?: 'Course', id: string } };
+
 export type UpdateGroupMutationVariables = Exact<{
   updateGroupInput: UpdateGroupInput;
 }>;
@@ -214,9 +272,11 @@ export type GroupQueryVariables = Exact<{
 }>;
 
 
-export type GroupQuery = { __typename?: 'Query', group: { __typename?: 'Group', id: string, name: string, semester: number, students: Array<{ __typename?: 'Student', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } }>, educator?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } } | null } };
+export type GroupQuery = { __typename?: 'Query', group: { __typename?: 'Group', id: string, name: string, semester: number, students: Array<{ __typename?: 'Student', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } }>, educator?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } } | null, courses: Array<{ __typename?: 'Course', id: string, name: string, teacher?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } } | null }> } };
 
-export type GroupFieldsFragment = { __typename?: 'Group', id: string, name: string, semester: number, students: Array<{ __typename?: 'Student', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } }>, educator?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } } | null };
+export type GroupFieldsFragment = { __typename?: 'Group', id: string, name: string, semester: number, students: Array<{ __typename?: 'Student', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } }>, educator?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } } | null, courses: Array<{ __typename?: 'Course', id: string, name: string, teacher?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } } | null }> };
+
+export type CourseFieldsFragment = { __typename?: 'Course', id: string, name: string, teacher?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } } | null };
 
 export type RemoveGroupMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -228,7 +288,7 @@ export type RemoveGroupMutation = { __typename?: 'Mutation', removeGroup: { __ty
 export type GroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GroupsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string, semester: number, students: Array<{ __typename?: 'Student', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } }>, educator?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } } | null }> };
+export type GroupsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string, semester: number, students: Array<{ __typename?: 'Student', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } }>, educator?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } } | null, courses: Array<{ __typename?: 'Course', id: string, name: string, teacher?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } } | null }> }> };
 
 export type TeachersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -289,6 +349,18 @@ export const UserFieldsFragmentDoc = gql`
   role
 }
     `;
+export const CourseFieldsFragmentDoc = gql`
+    fragment CourseFields on Course {
+  id
+  name
+  teacher {
+    id
+    user {
+      ...UserFields
+    }
+  }
+}
+    ${UserFieldsFragmentDoc}`;
 export const GroupFieldsFragmentDoc = gql`
     fragment GroupFields on Group {
   id
@@ -306,8 +378,12 @@ export const GroupFieldsFragmentDoc = gql`
       ...UserFields
     }
   }
+  courses {
+    ...CourseFields
+  }
 }
-    ${UserFieldsFragmentDoc}`;
+    ${UserFieldsFragmentDoc}
+${CourseFieldsFragmentDoc}`;
 export const CreateGroupDocument = gql`
     mutation createGroup($createGroupInput: CreateGroupInput!) {
   createGroup(createGroupInput: $createGroupInput) {
@@ -341,6 +417,72 @@ export function useCreateGroupMutation(baseOptions?: Apollo.MutationHookOptions<
 export type CreateGroupMutationHookResult = ReturnType<typeof useCreateGroupMutation>;
 export type CreateGroupMutationResult = Apollo.MutationResult<CreateGroupMutation>;
 export type CreateGroupMutationOptions = Apollo.BaseMutationOptions<CreateGroupMutation, CreateGroupMutationVariables>;
+export const CreateCourseDocument = gql`
+    mutation createCourse($createCourseInput: CreateCourseInput!) {
+  createCourse(createCourseInput: $createCourseInput) {
+    id
+  }
+}
+    `;
+export type CreateCourseMutationFn = Apollo.MutationFunction<CreateCourseMutation, CreateCourseMutationVariables>;
+
+/**
+ * __useCreateCourseMutation__
+ *
+ * To run a mutation, you first call `useCreateCourseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCourseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCourseMutation, { data, loading, error }] = useCreateCourseMutation({
+ *   variables: {
+ *      createCourseInput: // value for 'createCourseInput'
+ *   },
+ * });
+ */
+export function useCreateCourseMutation(baseOptions?: Apollo.MutationHookOptions<CreateCourseMutation, CreateCourseMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCourseMutation, CreateCourseMutationVariables>(CreateCourseDocument, options);
+      }
+export type CreateCourseMutationHookResult = ReturnType<typeof useCreateCourseMutation>;
+export type CreateCourseMutationResult = Apollo.MutationResult<CreateCourseMutation>;
+export type CreateCourseMutationOptions = Apollo.BaseMutationOptions<CreateCourseMutation, CreateCourseMutationVariables>;
+export const RemoveCourseDocument = gql`
+    mutation removeCourse($id: Int!) {
+  removeCourse(id: $id) {
+    id
+  }
+}
+    `;
+export type RemoveCourseMutationFn = Apollo.MutationFunction<RemoveCourseMutation, RemoveCourseMutationVariables>;
+
+/**
+ * __useRemoveCourseMutation__
+ *
+ * To run a mutation, you first call `useRemoveCourseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveCourseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeCourseMutation, { data, loading, error }] = useRemoveCourseMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRemoveCourseMutation(baseOptions?: Apollo.MutationHookOptions<RemoveCourseMutation, RemoveCourseMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveCourseMutation, RemoveCourseMutationVariables>(RemoveCourseDocument, options);
+      }
+export type RemoveCourseMutationHookResult = ReturnType<typeof useRemoveCourseMutation>;
+export type RemoveCourseMutationResult = Apollo.MutationResult<RemoveCourseMutation>;
+export type RemoveCourseMutationOptions = Apollo.BaseMutationOptions<RemoveCourseMutation, RemoveCourseMutationVariables>;
 export const UpdateGroupDocument = gql`
     mutation updateGroup($updateGroupInput: UpdateGroupInput!) {
   updateGroup(updateGroupInput: $updateGroupInput) {

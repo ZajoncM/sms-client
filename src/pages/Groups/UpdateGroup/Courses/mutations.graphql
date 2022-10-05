@@ -1,0 +1,11 @@
+mutation createCourse($createCourseInput: CreateCourseInput!) {
+  createCourse(createCourseInput: $createCourseInput) {
+    id
+  }
+}
+
+mutation removeCourse($id: Int!) {
+  removeCourse(id: $id) {
+    id
+  }
+}
