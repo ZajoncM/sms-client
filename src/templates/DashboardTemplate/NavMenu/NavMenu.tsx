@@ -25,6 +25,7 @@ export const getItem = (
 const allItems = [
   getItem("Kokpit", "dashboard", <HomeOutlined />),
   getItem("Użytkownicy", "users", <UserOutlined />, [UserRoleEnum.Admin]),
+  getItem("Klasy", "groups", <UserOutlined />, [UserRoleEnum.Admin]),
 ];
 
 const NavMenu = () => {

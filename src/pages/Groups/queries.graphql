@@ -1,0 +1,23 @@
+query groups {
+  groups {
+    ...GroupFields
+  }
+}
+
+query teachers {
+  users(user: { role: TEACHER }) {
+    ...UserFields
+    teacher {
+      id
+    }
+  }
+}
+
+query students {
+  users(user: { role: STUDENT }) {
+    ...UserFields
+    student {
+      id
+    }
+  }
+}

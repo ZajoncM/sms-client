@@ -4,7 +4,7 @@ import {
   UpdateUserInput,
   useUpdateUserMutation,
   useUserQuery,
-} from "../../../generated/graphql";
+} from "../../../../generated/graphql";
 
 const UpdateUserForm = () => {
   const navigate = useNavigate();

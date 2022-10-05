@@ -1,0 +1,5 @@
+query group($id: Int!) {
+  group(id: $id) {
+    ...GroupFields
+  }
+}

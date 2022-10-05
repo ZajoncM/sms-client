@@ -1,9 +1,12 @@
-import { Input, Button, Form } from "antd";
+import { Input, Button, Form, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
   CreateUserInput,
   useCreateUserMutation,
-} from "../../../generated/graphql";
+  UserRoleEnum,
+} from "../../../../generated/graphql";
+
+const { Option } = Select;
 
 const CreateUserForm = () => {
   const navigate = useNavigate();
@@ -19,6 +22,8 @@ const CreateUserForm = () => {
       refetchQueries: ["users"],
     });
   };
+
+  const userRoles = Object.values(UserRoleEnum);
 
   return (
     <Form
@@ -59,6 +64,13 @@ const CreateUserForm = () => {
         <Input.Password />
       </Form.Item>
 
+      <Form.Item name="role" label="Rola" rules={[{ required: true }]}>
+        <Select allowClear>
+          {userRoles.map((role) => (
+            <Option value={role}>{role}</Option>
+          ))}
+        </Select>
+      </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
           Dodaj

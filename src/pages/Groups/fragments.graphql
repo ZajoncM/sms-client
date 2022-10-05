@@ -1,0 +1,17 @@
+fragment GroupFields on Group {
+  id
+  name
+  semester
+  students {
+    id
+    user {
+      ...UserFields
+    }
+  }
+  educator {
+    id
+    user {
+      ...UserFields
+    }
+  }
+}
