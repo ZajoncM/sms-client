@@ -32,7 +32,7 @@ const UpdateUserForm = () => {
       variables: {
         updateGroupInput: { ...groupDto, id: Number(id), semester },
       },
-      refetchQueries: ["users"],
+      refetchQueries: ["groups"],
     });
   };
 

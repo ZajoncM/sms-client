@@ -21,8 +21,6 @@ const CreateUserForm = () => {
   const { data: studentsData, loading: studentsLoading } = useStudentsQuery();
 
   const onFinish = (groupDto: CreateGroupInput) => {
-    console.log(groupDto);
-
     const { semester } = groupDto;
 
     createGroup({
