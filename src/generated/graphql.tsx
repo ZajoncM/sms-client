@@ -62,6 +62,7 @@ export type Mutation = {
   removeCourse: Course;
   removeGroup: Group;
   removeUser: User;
+  updateCourse: Course;
   updateGroup: Group;
   updateUser: User;
 };
@@ -94,6 +95,12 @@ export type MutationRemoveGroupArgs = {
 
 export type MutationRemoveUserArgs = {
   id: Scalars['Int'];
+};
+
+
+export type MutationUpdateCourseArgs = {
+  id: Scalars['Int'];
+  updateCourseInput: CreateCourseInput;
 };
 
 
@@ -252,6 +259,14 @@ export type CreateCourseMutationVariables = Exact<{
 
 
 export type CreateCourseMutation = { __typename?: 'Mutation', createCourse: { __typename?: 'Course', id: string } };
+
+export type UpdateCourseMutationVariables = Exact<{
+  id: Scalars['Int'];
+  updateCourseInput: CreateCourseInput;
+}>;
+
+
+export type UpdateCourseMutation = { __typename?: 'Mutation', updateCourse: { __typename?: 'Course', id: string } };
 
 export type RemoveCourseMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -450,6 +465,40 @@ export function useCreateCourseMutation(baseOptions?: Apollo.MutationHookOptions
 export type CreateCourseMutationHookResult = ReturnType<typeof useCreateCourseMutation>;
 export type CreateCourseMutationResult = Apollo.MutationResult<CreateCourseMutation>;
 export type CreateCourseMutationOptions = Apollo.BaseMutationOptions<CreateCourseMutation, CreateCourseMutationVariables>;
+export const UpdateCourseDocument = gql`
+    mutation updateCourse($id: Int!, $updateCourseInput: CreateCourseInput!) {
+  updateCourse(id: $id, updateCourseInput: $updateCourseInput) {
+    id
+  }
+}
+    `;
+export type UpdateCourseMutationFn = Apollo.MutationFunction<UpdateCourseMutation, UpdateCourseMutationVariables>;
+
+/**
+ * __useUpdateCourseMutation__
+ *
+ * To run a mutation, you first call `useUpdateCourseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCourseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCourseMutation, { data, loading, error }] = useUpdateCourseMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      updateCourseInput: // value for 'updateCourseInput'
+ *   },
+ * });
+ */
+export function useUpdateCourseMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCourseMutation, UpdateCourseMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCourseMutation, UpdateCourseMutationVariables>(UpdateCourseDocument, options);
+      }
+export type UpdateCourseMutationHookResult = ReturnType<typeof useUpdateCourseMutation>;
+export type UpdateCourseMutationResult = Apollo.MutationResult<UpdateCourseMutation>;
+export type UpdateCourseMutationOptions = Apollo.BaseMutationOptions<UpdateCourseMutation, UpdateCourseMutationVariables>;
 export const RemoveCourseDocument = gql`
     mutation removeCourse($id: Int!) {
   removeCourse(id: $id) {

@@ -4,6 +4,7 @@ import {
   useCreateCourseMutation,
   useRemoveCourseMutation,
 } from "../../../../generated/graphql";
+import Course from "../Course/Course";
 
 type Props = {
   courses: CourseFieldsFragment[];
@@ -27,11 +28,11 @@ const Courses = ({ courses, groupId }: Props) => {
     <Tabs
       type="editable-card"
       onEdit={onEdit}
-      items={courses.map(({ id, name }) => {
+      items={courses.map((course) => {
         return {
-          label: name,
-          key: id,
-          children: `Content of Tab Pane ${id}`,
+          label: course.name,
+          key: course.id,
+          children: <Course course={course} groupId={groupId} />,
         };
       })}
     />
