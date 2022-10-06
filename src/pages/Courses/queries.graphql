@@ -1,0 +1,5 @@
+query courses($courseDto: UpdateCourseInput) {
+  courses(updateCourseInput: $courseDto) {
+    ...CourseFields
+  }
+}

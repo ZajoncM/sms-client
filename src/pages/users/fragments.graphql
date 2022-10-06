@@ -4,4 +4,8 @@ fragment UserFields on User {
   firstName
   lastName
   role
+
+  teacher {
+    id
+  }
 }

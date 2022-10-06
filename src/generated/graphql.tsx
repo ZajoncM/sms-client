@@ -19,6 +19,7 @@ export type Course = {
   __typename?: 'Course';
   group: Group;
   id: Scalars['ID'];
+  lessons: Array<Lesson>;
   name: Scalars['String'];
   teacher?: Maybe<Teacher>;
 };
@@ -52,6 +53,13 @@ export type Group = {
   name: Scalars['String'];
   semester: Scalars['Int'];
   students: Array<Student>;
+};
+
+export type Lesson = {
+  __typename?: 'Lesson';
+  course: Scalars['String'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
 };
 
 export type Mutation = {
@@ -135,6 +143,11 @@ export type QueryCourseArgs = {
 };
 
 
+export type QueryCoursesArgs = {
+  updateCourseInput?: InputMaybe<UpdateCourseInput>;
+};
+
+
 export type QueryGroupArgs = {
   id: Scalars['Int'];
 };
@@ -162,6 +175,12 @@ export type Teacher = {
   group: Group;
   id: Scalars['ID'];
   user: User;
+};
+
+export type UpdateCourseInput = {
+  groupId?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  teacherId?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateGroupInput = {
@@ -204,6 +223,7 @@ export enum UserRoleEnum {
 export type CourseEntity = {
   group: GroupEntity;
   id: Scalars['ID'];
+  lessons: Array<LessonEntity>;
   name: Scalars['String'];
   teacher?: InputMaybe<TeacherEntity>;
 };
@@ -215,6 +235,12 @@ export type GroupEntity = {
   name: Scalars['String'];
   semester: Scalars['Int'];
   students: Array<StudentEntity>;
+};
+
+export type LessonEntity = {
+  course: Scalars['String'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
 };
 
 export type ParentEntity = {
@@ -245,6 +271,13 @@ export type UserEntity = {
   student?: InputMaybe<StudentEntity>;
   teacher?: InputMaybe<TeacherEntity>;
 };
+
+export type CoursesQueryVariables = Exact<{
+  courseDto?: InputMaybe<UpdateCourseInput>;
+}>;
+
+
+export type CoursesQuery = { __typename?: 'Query', courses: Array<{ __typename?: 'Course', id: string, name: string, teacher?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } } | null }> };
 
 export type CreateGroupMutationVariables = Exact<{
   createGroupInput: CreateGroupInput;
@@ -287,11 +320,11 @@ export type GroupQueryVariables = Exact<{
 }>;
 
 
-export type GroupQuery = { __typename?: 'Query', group: { __typename?: 'Group', id: string, name: string, semester: number, students: Array<{ __typename?: 'Student', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } }>, educator?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } } | null, courses: Array<{ __typename?: 'Course', id: string, name: string, teacher?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } } | null }> } };
+export type GroupQuery = { __typename?: 'Query', group: { __typename?: 'Group', id: string, name: string, semester: number, students: Array<{ __typename?: 'Student', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } }>, educator?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } } | null, courses: Array<{ __typename?: 'Course', id: string, name: string, teacher?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } } | null }> } };
 
-export type GroupFieldsFragment = { __typename?: 'Group', id: string, name: string, semester: number, students: Array<{ __typename?: 'Student', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } }>, educator?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } } | null, courses: Array<{ __typename?: 'Course', id: string, name: string, teacher?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } } | null }> };
+export type GroupFieldsFragment = { __typename?: 'Group', id: string, name: string, semester: number, students: Array<{ __typename?: 'Student', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } }>, educator?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } } | null, courses: Array<{ __typename?: 'Course', id: string, name: string, teacher?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } } | null }> };
 
-export type CourseFieldsFragment = { __typename?: 'Course', id: string, name: string, teacher?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } } | null };
+export type CourseFieldsFragment = { __typename?: 'Course', id: string, name: string, teacher?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } } | null };
 
 export type RemoveGroupMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -303,7 +336,7 @@ export type RemoveGroupMutation = { __typename?: 'Mutation', removeGroup: { __ty
 export type GroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GroupsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string, semester: number, students: Array<{ __typename?: 'Student', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } }>, educator?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } } | null, courses: Array<{ __typename?: 'Course', id: string, name: string, teacher?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } } | null }> }> };
+export type GroupsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string, semester: number, students: Array<{ __typename?: 'Student', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } }>, educator?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } } | null, courses: Array<{ __typename?: 'Course', id: string, name: string, teacher?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } } | null }> }> };
 
 export type TeachersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -313,47 +346,47 @@ export type TeachersQuery = { __typename?: 'Query', users: Array<{ __typename?: 
 export type StudentsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StudentsQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, student?: { __typename?: 'Student', id: string } | null }> };
+export type StudentsQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, student?: { __typename?: 'Student', id: string } | null, teacher?: { __typename?: 'Teacher', id: string } | null }> };
 
 export type CreateUserMutationVariables = Exact<{
   createUserInput: CreateUserInput;
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } };
 
 export type UpdateUserMutationVariables = Exact<{
   updateUserInput: UpdateUserInput;
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } };
 
 export type UserQueryVariables = Exact<{
   user: UpdateUserInput;
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } };
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } };
 
-export type UserFieldsFragment = { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum };
+export type UserFieldsFragment = { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null };
 
 export type RemoveUserMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type RemoveUserMutation = { __typename?: 'Mutation', removeUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } };
+export type RemoveUserMutation = { __typename?: 'Mutation', removeUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum }> };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum } };
+export type MeQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } };
 
 export const UserFieldsFragmentDoc = gql`
     fragment UserFields on User {
@@ -362,6 +395,9 @@ export const UserFieldsFragmentDoc = gql`
   firstName
   lastName
   role
+  teacher {
+    id
+  }
 }
     `;
 export const CourseFieldsFragmentDoc = gql`
@@ -399,6 +435,41 @@ export const GroupFieldsFragmentDoc = gql`
 }
     ${UserFieldsFragmentDoc}
 ${CourseFieldsFragmentDoc}`;
+export const CoursesDocument = gql`
+    query courses($courseDto: UpdateCourseInput) {
+  courses(updateCourseInput: $courseDto) {
+    ...CourseFields
+  }
+}
+    ${CourseFieldsFragmentDoc}`;
+
+/**
+ * __useCoursesQuery__
+ *
+ * To run a query within a React component, call `useCoursesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCoursesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCoursesQuery({
+ *   variables: {
+ *      courseDto: // value for 'courseDto'
+ *   },
+ * });
+ */
+export function useCoursesQuery(baseOptions?: Apollo.QueryHookOptions<CoursesQuery, CoursesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CoursesQuery, CoursesQueryVariables>(CoursesDocument, options);
+      }
+export function useCoursesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CoursesQuery, CoursesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CoursesQuery, CoursesQueryVariables>(CoursesDocument, options);
+        }
+export type CoursesQueryHookResult = ReturnType<typeof useCoursesQuery>;
+export type CoursesLazyQueryHookResult = ReturnType<typeof useCoursesLazyQuery>;
+export type CoursesQueryResult = Apollo.QueryResult<CoursesQuery, CoursesQueryVariables>;
 export const CreateGroupDocument = gql`
     mutation createGroup($createGroupInput: CreateGroupInput!) {
   createGroup(createGroupInput: $createGroupInput) {

@@ -1,4 +1,4 @@
-import { UserOutlined, HomeOutlined } from "@ant-design/icons";
+import { UserOutlined, HomeOutlined, CopyOutlined } from "@ant-design/icons";
 import { Menu, MenuProps } from "antd";
 import { useNavigate } from "react-router-dom";
 import { UserRoleEnum } from "../../../generated/graphql";
@@ -26,6 +26,7 @@ const allItems = [
   getItem("Kokpit", "dashboard", <HomeOutlined />),
   getItem("Użytkownicy", "users", <UserOutlined />, [UserRoleEnum.Admin]),
   getItem("Klasy", "groups", <UserOutlined />, [UserRoleEnum.Admin]),
+  getItem("Kursy", "courses", <CopyOutlined />, [UserRoleEnum.Teacher]),
 ];
 
 const NavMenu = () => {
