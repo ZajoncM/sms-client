@@ -38,6 +38,7 @@ export type CreateGroupInput = {
 };
 
 export type CreateLessonInput = {
+  courseId: Scalars['String'];
   name: Scalars['String'];
 };
 
@@ -182,6 +183,11 @@ export type QueryLessonArgs = {
 };
 
 
+export type QueryLessonsArgs = {
+  lessonDto?: InputMaybe<UpdateLessonInput>;
+};
+
+
 export type QueryUserArgs = {
   user: UpdateUserInput;
 };
@@ -221,6 +227,7 @@ export type UpdateGroupInput = {
 };
 
 export type UpdateLessonInput = {
+  courseId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
 };
@@ -305,6 +312,29 @@ export type UserEntity = {
   student?: InputMaybe<StudentEntity>;
   teacher?: InputMaybe<TeacherEntity>;
 };
+
+export type CreateLessonMutationVariables = Exact<{
+  createLessonInput: CreateLessonInput;
+}>;
+
+
+export type CreateLessonMutation = { __typename?: 'Mutation', createLesson: { __typename?: 'Lesson', id: string } };
+
+export type UpdateLessonMutationVariables = Exact<{
+  updateLessonInput: UpdateLessonInput;
+}>;
+
+
+export type UpdateLessonMutation = { __typename?: 'Mutation', updateLesson: { __typename?: 'Lesson', id: string } };
+
+export type LessonsQueryVariables = Exact<{
+  lessonDto?: InputMaybe<UpdateLessonInput>;
+}>;
+
+
+export type LessonsQuery = { __typename?: 'Query', lessons: Array<{ __typename?: 'Lesson', id: string, name: string }> };
+
+export type LessonFieldsFragment = { __typename?: 'Lesson', id: string, name: string };
 
 export type CourseQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -429,6 +459,12 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } };
 
+export const LessonFieldsFragmentDoc = gql`
+    fragment LessonFields on Lesson {
+  id
+  name
+}
+    `;
 export const UserFieldsFragmentDoc = gql`
     fragment UserFields on User {
   id
@@ -481,6 +517,107 @@ export const GroupFieldsFragmentDoc = gql`
 }
     ${UserFieldsFragmentDoc}
 ${CourseFieldsFragmentDoc}`;
+export const CreateLessonDocument = gql`
+    mutation createLesson($createLessonInput: CreateLessonInput!) {
+  createLesson(createLessonInput: $createLessonInput) {
+    id
+  }
+}
+    `;
+export type CreateLessonMutationFn = Apollo.MutationFunction<CreateLessonMutation, CreateLessonMutationVariables>;
+
+/**
+ * __useCreateLessonMutation__
+ *
+ * To run a mutation, you first call `useCreateLessonMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateLessonMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createLessonMutation, { data, loading, error }] = useCreateLessonMutation({
+ *   variables: {
+ *      createLessonInput: // value for 'createLessonInput'
+ *   },
+ * });
+ */
+export function useCreateLessonMutation(baseOptions?: Apollo.MutationHookOptions<CreateLessonMutation, CreateLessonMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateLessonMutation, CreateLessonMutationVariables>(CreateLessonDocument, options);
+      }
+export type CreateLessonMutationHookResult = ReturnType<typeof useCreateLessonMutation>;
+export type CreateLessonMutationResult = Apollo.MutationResult<CreateLessonMutation>;
+export type CreateLessonMutationOptions = Apollo.BaseMutationOptions<CreateLessonMutation, CreateLessonMutationVariables>;
+export const UpdateLessonDocument = gql`
+    mutation updateLesson($updateLessonInput: UpdateLessonInput!) {
+  updateLesson(updateLessonInput: $updateLessonInput) {
+    id
+  }
+}
+    `;
+export type UpdateLessonMutationFn = Apollo.MutationFunction<UpdateLessonMutation, UpdateLessonMutationVariables>;
+
+/**
+ * __useUpdateLessonMutation__
+ *
+ * To run a mutation, you first call `useUpdateLessonMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateLessonMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateLessonMutation, { data, loading, error }] = useUpdateLessonMutation({
+ *   variables: {
+ *      updateLessonInput: // value for 'updateLessonInput'
+ *   },
+ * });
+ */
+export function useUpdateLessonMutation(baseOptions?: Apollo.MutationHookOptions<UpdateLessonMutation, UpdateLessonMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateLessonMutation, UpdateLessonMutationVariables>(UpdateLessonDocument, options);
+      }
+export type UpdateLessonMutationHookResult = ReturnType<typeof useUpdateLessonMutation>;
+export type UpdateLessonMutationResult = Apollo.MutationResult<UpdateLessonMutation>;
+export type UpdateLessonMutationOptions = Apollo.BaseMutationOptions<UpdateLessonMutation, UpdateLessonMutationVariables>;
+export const LessonsDocument = gql`
+    query lessons($lessonDto: UpdateLessonInput) {
+  lessons(lessonDto: $lessonDto) {
+    ...LessonFields
+  }
+}
+    ${LessonFieldsFragmentDoc}`;
+
+/**
+ * __useLessonsQuery__
+ *
+ * To run a query within a React component, call `useLessonsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLessonsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLessonsQuery({
+ *   variables: {
+ *      lessonDto: // value for 'lessonDto'
+ *   },
+ * });
+ */
+export function useLessonsQuery(baseOptions?: Apollo.QueryHookOptions<LessonsQuery, LessonsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LessonsQuery, LessonsQueryVariables>(LessonsDocument, options);
+      }
+export function useLessonsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LessonsQuery, LessonsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LessonsQuery, LessonsQueryVariables>(LessonsDocument, options);
+        }
+export type LessonsQueryHookResult = ReturnType<typeof useLessonsQuery>;
+export type LessonsLazyQueryHookResult = ReturnType<typeof useLessonsLazyQuery>;
+export type LessonsQueryResult = Apollo.QueryResult<LessonsQuery, LessonsQueryVariables>;
 export const CourseDocument = gql`
     query course($id: Int!) {
   course(id: $id) {

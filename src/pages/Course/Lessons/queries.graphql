@@ -1,0 +1,10 @@
+query lessons($lessonDto: UpdateLessonInput) {
+  lessons(lessonDto: $lessonDto) {
+    ...LessonFields
+  }
+}
+
+fragment LessonFields on Lesson {
+  id
+  name
+}

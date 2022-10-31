@@ -1,0 +1,11 @@
+mutation createLesson($createLessonInput: CreateLessonInput!) {
+  createLesson(createLessonInput: $createLessonInput) {
+    id
+  }
+}
+
+mutation updateLesson($updateLessonInput: UpdateLessonInput!) {
+  updateLesson(updateLessonInput: $updateLessonInput) {
+    id
+  }
+}
