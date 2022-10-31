@@ -11,8 +11,8 @@ import Groups from "../pages/Groups/Groups";
 import CreateGroup from "../pages/Groups/CreateGroup/CreateGroup";
 import UpdateGroup from "../pages/Groups/UpdateGroup/UpdateGroup";
 import GroupContainer from "../containers/GroupContainer";
-import Courses from "../pages/Courses/Courses";
 import CourseContainer from "../containers/CourseContainer";
+import Course from "../pages/Course/Course";
 
 export const router = createBrowserRouter([
   {
@@ -64,12 +64,12 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: "/courses",
+        path: "/courses/:id",
         element: <CourseContainer />,
         children: [
           {
             index: true,
-            element: <Courses />,
+            element: <Course />,
           },
         ],
       },

@@ -26,7 +26,6 @@ const allItems = [
   getItem("Kokpit", "dashboard", <HomeOutlined />),
   getItem("Użytkownicy", "users", <UserOutlined />, [UserRoleEnum.Admin]),
   getItem("Klasy", "groups", <UserOutlined />, [UserRoleEnum.Admin]),
-  getItem("Kursy", "courses", <CopyOutlined />, [UserRoleEnum.Teacher]),
 ];
 
 const NavMenu = () => {

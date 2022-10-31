@@ -1,0 +1,5 @@
+query course($id: Int!) {
+  course(id: $id) {
+    ...CourseFields
+  }
+}

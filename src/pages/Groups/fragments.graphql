@@ -29,4 +29,9 @@ fragment CourseFields on Course {
       ...UserFields
     }
   }
+  group {
+    id
+    name
+    semester
+  }
 }
