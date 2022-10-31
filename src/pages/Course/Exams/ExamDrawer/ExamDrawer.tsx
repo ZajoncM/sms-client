@@ -1,9 +1,9 @@
 import { Button, Drawer, Form, FormInstance, Input } from "antd";
 import { useParams } from "react-router-dom";
 import {
-  LessonFieldsFragment,
-  useCreateLessonMutation,
-  useUpdateLessonMutation,
+  ExamFieldsFragment,
+  useCreateExamMutation,
+  useUpdateExamMutation,
 } from "../../../../generated/graphql";
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
   form: FormInstance;
 };
 
-const LessonDrawer = ({ open, onClose, form }: Props) => {
+const ExamDrawer = ({ open, onClose, form }: Props) => {
   const { id } = useParams();
   const lessonId = form.getFieldValue("id");
 
@@ -21,34 +21,34 @@ const LessonDrawer = ({ open, onClose, form }: Props) => {
     onClose();
   };
 
-  const [createLesson] = useCreateLessonMutation({
-    refetchQueries: ["lessons"],
+  const [createExam] = useCreateExamMutation({
+    refetchQueries: ["exams"],
     onCompleted: handleClose,
   });
 
-  const [updateLesson] = useUpdateLessonMutation({
-    refetchQueries: ["lessons"],
+  const [updateExam] = useUpdateExamMutation({
+    refetchQueries: ["exams"],
     onCompleted: handleClose,
   });
 
-  const onFinish = ({ name }: LessonFieldsFragment) => {
+  const onFinish = ({ name }: ExamFieldsFragment) => {
     if (!id) return;
 
     if (!lessonId) {
-      return createLesson({
-        variables: { createLessonInput: { name, courseId: id } },
+      return createExam({
+        variables: { createExamInput: { name, courseId: id } },
       });
     }
 
-    updateLesson({
-      variables: { updateLessonInput: { name, id: Number(lessonId) } },
+    updateExam({
+      variables: { updateExamInput: { name, id: Number(lessonId) } },
     });
   };
 
   return (
     <Drawer
       size="large"
-      title={lessonId ? "Edytuj lekcje" : "Dodaj lekcje"}
+      title={lessonId ? "Edytuj test" : "Dodaj test"}
       placement="right"
       onClose={handleClose}
       open={open}
@@ -77,4 +77,4 @@ const LessonDrawer = ({ open, onClose, form }: Props) => {
   );
 };
 
-export default LessonDrawer;
+export default ExamDrawer;

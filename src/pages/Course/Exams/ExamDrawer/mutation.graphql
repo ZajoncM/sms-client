@@ -1,0 +1,11 @@
+mutation createExam($createExamInput: CreateExamInput!) {
+  createExam(createExamInput: $createExamInput) {
+    id
+  }
+}
+
+mutation updateExam($updateExamInput: UpdateExamInput!) {
+  updateExam(updateExamInput: $updateExamInput) {
+    id
+  }
+}

@@ -17,6 +17,7 @@ export type Scalars = {
 
 export type Course = {
   __typename?: 'Course';
+  exams: Array<Exam>;
   group: Group;
   id: Scalars['ID'];
   lessons: Array<Lesson>;
@@ -28,6 +29,11 @@ export type CreateCourseInput = {
   groupId: Scalars['String'];
   name: Scalars['String'];
   teacherId?: InputMaybe<Scalars['String']>;
+};
+
+export type CreateExamInput = {
+  courseId: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type CreateGroupInput = {
@@ -50,6 +56,13 @@ export type CreateUserInput = {
   role: UserRoleEnum;
 };
 
+export type Exam = {
+  __typename?: 'Exam';
+  course: Scalars['String'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
 export type Group = {
   __typename?: 'Group';
   courses: Array<Course>;
@@ -70,14 +83,17 @@ export type Lesson = {
 export type Mutation = {
   __typename?: 'Mutation';
   createCourse: Course;
+  createExam: Exam;
   createGroup: Group;
   createLesson: Lesson;
   createUser: User;
   removeCourse: Course;
+  removeExam: Exam;
   removeGroup: Group;
   removeLesson: Lesson;
   removeUser: User;
   updateCourse: Course;
+  updateExam: Exam;
   updateGroup: Group;
   updateLesson: Lesson;
   updateUser: User;
@@ -86,6 +102,11 @@ export type Mutation = {
 
 export type MutationCreateCourseArgs = {
   createCourseInput: CreateCourseInput;
+};
+
+
+export type MutationCreateExamArgs = {
+  createExamInput: CreateExamInput;
 };
 
 
@@ -109,6 +130,11 @@ export type MutationRemoveCourseArgs = {
 };
 
 
+export type MutationRemoveExamArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type MutationRemoveGroupArgs = {
   id: Scalars['Int'];
 };
@@ -127,6 +153,11 @@ export type MutationRemoveUserArgs = {
 export type MutationUpdateCourseArgs = {
   id: Scalars['Int'];
   updateCourseInput: CreateCourseInput;
+};
+
+
+export type MutationUpdateExamArgs = {
+  updateExamInput: UpdateExamInput;
 };
 
 
@@ -154,6 +185,8 @@ export type Query = {
   course: Course;
   courses: Array<Course>;
   currentUser: User;
+  exam: Exam;
+  exams: Array<Exam>;
   group: Group;
   groups: Array<Group>;
   lesson: Lesson;
@@ -170,6 +203,16 @@ export type QueryCourseArgs = {
 
 export type QueryCoursesArgs = {
   updateCourseInput?: InputMaybe<UpdateCourseInput>;
+};
+
+
+export type QueryExamArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryExamsArgs = {
+  examDto?: InputMaybe<UpdateExamInput>;
 };
 
 
@@ -218,6 +261,12 @@ export type UpdateCourseInput = {
   teacherId?: InputMaybe<Scalars['String']>;
 };
 
+export type UpdateExamInput = {
+  courseId?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
 export type UpdateGroupInput = {
   educatorId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['Int']>;
@@ -262,11 +311,18 @@ export enum UserRoleEnum {
 }
 
 export type CourseEntity = {
+  exams: Array<ExamEntity>;
   group: GroupEntity;
   id: Scalars['ID'];
   lessons: Array<LessonEntity>;
   name: Scalars['String'];
   teacher?: InputMaybe<TeacherEntity>;
+};
+
+export type ExamEntity = {
+  course: Scalars['String'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
 };
 
 export type GroupEntity = {
@@ -312,6 +368,29 @@ export type UserEntity = {
   student?: InputMaybe<StudentEntity>;
   teacher?: InputMaybe<TeacherEntity>;
 };
+
+export type CreateExamMutationVariables = Exact<{
+  createExamInput: CreateExamInput;
+}>;
+
+
+export type CreateExamMutation = { __typename?: 'Mutation', createExam: { __typename?: 'Exam', id: string } };
+
+export type UpdateExamMutationVariables = Exact<{
+  updateExamInput: UpdateExamInput;
+}>;
+
+
+export type UpdateExamMutation = { __typename?: 'Mutation', updateExam: { __typename?: 'Exam', id: string } };
+
+export type ExamsQueryVariables = Exact<{
+  examDto?: InputMaybe<UpdateExamInput>;
+}>;
+
+
+export type ExamsQuery = { __typename?: 'Query', exams: Array<{ __typename?: 'Exam', id: string, name: string }> };
+
+export type ExamFieldsFragment = { __typename?: 'Exam', id: string, name: string };
 
 export type CreateLessonMutationVariables = Exact<{
   createLessonInput: CreateLessonInput;
@@ -459,6 +538,12 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null } };
 
+export const ExamFieldsFragmentDoc = gql`
+    fragment ExamFields on Exam {
+  id
+  name
+}
+    `;
 export const LessonFieldsFragmentDoc = gql`
     fragment LessonFields on Lesson {
   id
@@ -517,6 +602,107 @@ export const GroupFieldsFragmentDoc = gql`
 }
     ${UserFieldsFragmentDoc}
 ${CourseFieldsFragmentDoc}`;
+export const CreateExamDocument = gql`
+    mutation createExam($createExamInput: CreateExamInput!) {
+  createExam(createExamInput: $createExamInput) {
+    id
+  }
+}
+    `;
+export type CreateExamMutationFn = Apollo.MutationFunction<CreateExamMutation, CreateExamMutationVariables>;
+
+/**
+ * __useCreateExamMutation__
+ *
+ * To run a mutation, you first call `useCreateExamMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateExamMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createExamMutation, { data, loading, error }] = useCreateExamMutation({
+ *   variables: {
+ *      createExamInput: // value for 'createExamInput'
+ *   },
+ * });
+ */
+export function useCreateExamMutation(baseOptions?: Apollo.MutationHookOptions<CreateExamMutation, CreateExamMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateExamMutation, CreateExamMutationVariables>(CreateExamDocument, options);
+      }
+export type CreateExamMutationHookResult = ReturnType<typeof useCreateExamMutation>;
+export type CreateExamMutationResult = Apollo.MutationResult<CreateExamMutation>;
+export type CreateExamMutationOptions = Apollo.BaseMutationOptions<CreateExamMutation, CreateExamMutationVariables>;
+export const UpdateExamDocument = gql`
+    mutation updateExam($updateExamInput: UpdateExamInput!) {
+  updateExam(updateExamInput: $updateExamInput) {
+    id
+  }
+}
+    `;
+export type UpdateExamMutationFn = Apollo.MutationFunction<UpdateExamMutation, UpdateExamMutationVariables>;
+
+/**
+ * __useUpdateExamMutation__
+ *
+ * To run a mutation, you first call `useUpdateExamMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateExamMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateExamMutation, { data, loading, error }] = useUpdateExamMutation({
+ *   variables: {
+ *      updateExamInput: // value for 'updateExamInput'
+ *   },
+ * });
+ */
+export function useUpdateExamMutation(baseOptions?: Apollo.MutationHookOptions<UpdateExamMutation, UpdateExamMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateExamMutation, UpdateExamMutationVariables>(UpdateExamDocument, options);
+      }
+export type UpdateExamMutationHookResult = ReturnType<typeof useUpdateExamMutation>;
+export type UpdateExamMutationResult = Apollo.MutationResult<UpdateExamMutation>;
+export type UpdateExamMutationOptions = Apollo.BaseMutationOptions<UpdateExamMutation, UpdateExamMutationVariables>;
+export const ExamsDocument = gql`
+    query exams($examDto: UpdateExamInput) {
+  exams(examDto: $examDto) {
+    ...ExamFields
+  }
+}
+    ${ExamFieldsFragmentDoc}`;
+
+/**
+ * __useExamsQuery__
+ *
+ * To run a query within a React component, call `useExamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExamsQuery({
+ *   variables: {
+ *      examDto: // value for 'examDto'
+ *   },
+ * });
+ */
+export function useExamsQuery(baseOptions?: Apollo.QueryHookOptions<ExamsQuery, ExamsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ExamsQuery, ExamsQueryVariables>(ExamsDocument, options);
+      }
+export function useExamsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExamsQuery, ExamsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ExamsQuery, ExamsQueryVariables>(ExamsDocument, options);
+        }
+export type ExamsQueryHookResult = ReturnType<typeof useExamsQuery>;
+export type ExamsLazyQueryHookResult = ReturnType<typeof useExamsLazyQuery>;
+export type ExamsQueryResult = Apollo.QueryResult<ExamsQuery, ExamsQueryVariables>;
 export const CreateLessonDocument = gql`
     mutation createLesson($createLessonInput: CreateLessonInput!) {
   createLesson(createLessonInput: $createLessonInput) {

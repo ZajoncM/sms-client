@@ -1,0 +1,10 @@
+query exams($examDto: UpdateExamInput) {
+  exams(examDto: $examDto) {
+    ...ExamFields
+  }
+}
+
+fragment ExamFields on Exam {
+  id
+  name
+}
