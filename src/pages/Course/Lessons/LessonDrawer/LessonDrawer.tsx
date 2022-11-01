@@ -1,10 +1,13 @@
 import { Button, Drawer, Form, FormInstance, Input } from "antd";
+import TextArea from "antd/lib/input/TextArea";
 import { useParams } from "react-router-dom";
 import {
   LessonFieldsFragment,
   useCreateLessonMutation,
   useUpdateLessonMutation,
 } from "../../../../generated/graphql";
+import { useCourse } from "../../Course";
+import Attendances from "./Attendances/Attendances";
 
 type Props = {
   open: boolean;
@@ -31,17 +34,19 @@ const LessonDrawer = ({ open, onClose, form }: Props) => {
     onCompleted: handleClose,
   });
 
-  const onFinish = ({ name }: LessonFieldsFragment) => {
+  const onFinish = ({ name, description }: LessonFieldsFragment) => {
     if (!id) return;
 
     if (!lessonId) {
       return createLesson({
-        variables: { createLessonInput: { name, courseId: id } },
+        variables: { createLessonInput: { name, description, courseId: id } },
       });
     }
 
     updateLesson({
-      variables: { updateLessonInput: { name, id: Number(lessonId) } },
+      variables: {
+        updateLessonInput: { name, description, id: Number(lessonId) },
+      },
     });
   };
 
@@ -59,6 +64,7 @@ const LessonDrawer = ({ open, onClose, form }: Props) => {
         onFinish={onFinish}
         autoComplete="off"
         form={form}
+        layout="vertical"
       >
         <Form.Item
           label="Nazwa"
@@ -67,12 +73,17 @@ const LessonDrawer = ({ open, onClose, form }: Props) => {
         >
           <Input />
         </Form.Item>
+        <Form.Item label="Opis" name="description">
+          <TextArea rows={4} />
+        </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Dodaj
+            {lessonId ? "Edytuj" : "Dodaj"}
           </Button>
         </Form.Item>
       </Form>
+
+      {lessonId && <Attendances lessonId={lessonId} />}
     </Drawer>
   );
 };

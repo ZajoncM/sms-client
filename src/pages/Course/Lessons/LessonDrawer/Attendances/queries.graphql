@@ -1,0 +1,9 @@
+query attendances($attendanceDto: UpdateAttendanceInput!) {
+  attendances(attendanceDto: $attendanceDto) {
+    id
+    type
+    student {
+      id
+    }
+  }
+}

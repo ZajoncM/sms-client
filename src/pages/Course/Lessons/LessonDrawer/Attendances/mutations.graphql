@@ -1,0 +1,5 @@
+mutation createAttendance($createAttendanceInput: CreateAttendanceInput!) {
+  createAttendance(createAttendanceInput: $createAttendanceInput) {
+    id
+  }
+}

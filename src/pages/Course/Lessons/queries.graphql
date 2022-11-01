@@ -7,4 +7,12 @@ query lessons($lessonDto: UpdateLessonInput) {
 fragment LessonFields on Lesson {
   id
   name
+  description
+  attendances {
+    id
+    type
+    student {
+      id
+    }
+  }
 }

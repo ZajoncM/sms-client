@@ -1,8 +1,11 @@
-import { Card, Col, List, PageHeader, Row, Typography } from "antd";
+import { Col, PageHeader, Row } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { CourseFieldsFragment, useCourseQuery } from "../../generated/graphql";
+import { createCtx } from "../../utils/createCtx";
 import Exams from "./Exams/Exams";
 import Lessons from "./Lessons/Lessons";
+
+export const [useCourse, CourseProvider] = createCtx<CourseFieldsFragment>();
 
 const Course = () => {
   const { id } = useParams();
@@ -12,7 +15,7 @@ const Course = () => {
   if (loading) return <div>loading</div>;
 
   return (
-    <>
+    <CourseProvider value={data?.course}>
       <PageHeader
         onBack={() => navigate(-1)}
         title={`${data?.course.name} (${data?.course.group.name} - semestr ${data?.course.group.semester})`}
@@ -25,7 +28,7 @@ const Course = () => {
           <Exams />
         </Col>
       </Row>
-    </>
+    </CourseProvider>
   );
 };
 

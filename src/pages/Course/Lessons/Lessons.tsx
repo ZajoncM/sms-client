@@ -6,7 +6,11 @@ import {
   LessonFieldsFragment,
   useLessonsQuery,
 } from "../../../generated/graphql";
+import { createCtx } from "../../../utils/createCtx";
 import LessonDrawer from "./LessonDrawer/LessonDrawer";
+
+export const [useLessons, LessonsProvider] =
+  createCtx<LessonFieldsFragment[]>();
 
 const Lessons = () => {
   const { id } = useParams();
@@ -17,41 +21,43 @@ const Lessons = () => {
   const [form] = Form.useForm<LessonFieldsFragment>();
 
   return (
-    <Card>
-      <List<LessonFieldsFragment>
-        size="large"
-        header={
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography.Title level={4} style={{ margin: 0 }}>
-              Lekcje
-            </Typography.Title>
-            <Button
-              icon={<PlusOutlined />}
-              onClick={() => setNewLesson(true)}
-            />
-          </div>
-        }
-        bordered
-        dataSource={data?.lessons}
-        loading={loading}
-        renderItem={(lesson) => (
-          <List.Item
-            onClick={() => {
-              form.setFieldsValue(lesson);
-              setNewLesson(true);
-            }}
-            style={{ cursor: "pointer" }}
-          >
-            {lesson.name}
-          </List.Item>
-        )}
-      />
-      <LessonDrawer
-        onClose={() => setNewLesson(false)}
-        open={newLesson}
-        form={form}
-      />
-    </Card>
+    <LessonsProvider value={data?.lessons}>
+      <Card>
+        <List<LessonFieldsFragment>
+          size="large"
+          header={
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <Typography.Title level={4} style={{ margin: 0 }}>
+                Lekcje
+              </Typography.Title>
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() => setNewLesson(true)}
+              />
+            </div>
+          }
+          bordered
+          dataSource={data?.lessons}
+          loading={loading}
+          renderItem={(lesson) => (
+            <List.Item
+              onClick={() => {
+                form.setFieldsValue(lesson);
+                setNewLesson(true);
+              }}
+              style={{ cursor: "pointer" }}
+            >
+              {lesson.name}
+            </List.Item>
+          )}
+        />
+        <LessonDrawer
+          onClose={() => setNewLesson(false)}
+          open={newLesson}
+          form={form}
+        />
+      </Card>
+    </LessonsProvider>
   );
 };
 

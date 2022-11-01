@@ -33,5 +33,16 @@ fragment CourseFields on Course {
     id
     name
     semester
+    students {
+      id
+      user {
+        ...UserFields
+      }
+      attendances {
+        lesson {
+          id
+        }
+      }
+    }
   }
 }
