@@ -7,4 +7,11 @@ query exams($examDto: UpdateExamInput) {
 fragment ExamFields on Exam {
   id
   name
+  weight
+  grades {
+    value
+    student {
+      id
+    }
+  }
 }

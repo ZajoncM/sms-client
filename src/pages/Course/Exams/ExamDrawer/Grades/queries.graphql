@@ -1,0 +1,9 @@
+query grades($gradeDto: UpdateGradeInput!) {
+  grades(gradeDto: $gradeDto) {
+    id
+    value
+    student {
+      id
+    }
+  }
+}

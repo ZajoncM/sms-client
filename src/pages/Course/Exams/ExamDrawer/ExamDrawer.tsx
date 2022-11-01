@@ -1,10 +1,13 @@
-import { Button, Drawer, Form, FormInstance, Input } from "antd";
+import { Button, Drawer, Form, FormInstance, Input, Select } from "antd";
 import { useParams } from "react-router-dom";
 import {
   ExamFieldsFragment,
   useCreateExamMutation,
   useUpdateExamMutation,
 } from "../../../../generated/graphql";
+import Grades from "./Grades/Grades";
+
+const { Option } = Select;
 
 type Props = {
   open: boolean;
@@ -14,7 +17,7 @@ type Props = {
 
 const ExamDrawer = ({ open, onClose, form }: Props) => {
   const { id } = useParams();
-  const lessonId = form.getFieldValue("id");
+  const examId = form.getFieldValue("id");
 
   const handleClose = () => {
     form.resetFields();
@@ -31,24 +34,28 @@ const ExamDrawer = ({ open, onClose, form }: Props) => {
     onCompleted: handleClose,
   });
 
-  const onFinish = ({ name }: ExamFieldsFragment) => {
+  const onFinish = ({ name, weight }: ExamFieldsFragment) => {
     if (!id) return;
 
-    if (!lessonId) {
+    if (!examId) {
       return createExam({
-        variables: { createExamInput: { name, courseId: id } },
+        variables: {
+          createExamInput: { name, weight: Number(weight), courseId: id },
+        },
       });
     }
 
     updateExam({
-      variables: { updateExamInput: { name, id: Number(lessonId) } },
+      variables: {
+        updateExamInput: { name, weight: Number(weight), id: Number(examId) },
+      },
     });
   };
 
   return (
     <Drawer
       size="large"
-      title={lessonId ? "Edytuj test" : "Dodaj test"}
+      title={examId ? "Edytuj test" : "Dodaj test"}
       placement="right"
       onClose={handleClose}
       open={open}
@@ -67,12 +74,23 @@ const ExamDrawer = ({ open, onClose, form }: Props) => {
         >
           <Input />
         </Form.Item>
+        <Form.Item name="weight" label="Waga" rules={[{ required: true }]}>
+          <Select allowClear>
+            <Option value="1">1</Option>
+            <Option value="2">2</Option>
+            <Option value="3">3</Option>
+            <Option value="4">4</Option>
+            <Option value="5">5</Option>
+            <Option value="6">6</Option>
+          </Select>
+        </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
             Dodaj
           </Button>
         </Form.Item>
       </Form>
+      {examId && <Grades examId={examId} />}
     </Drawer>
   );
 };

@@ -47,7 +47,10 @@ const Lessons = () => {
               }}
               style={{ cursor: "pointer" }}
             >
-              {lesson.name}
+              <List.Item.Meta
+                title={lesson.name}
+                description={lesson.description}
+              />
             </List.Item>
           )}
         />

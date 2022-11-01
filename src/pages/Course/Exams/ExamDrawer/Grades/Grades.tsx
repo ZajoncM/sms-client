@@ -1,11 +1,10 @@
-import { List, Segmented, Typography } from "antd";
+import { List, Typography, Rate } from "antd";
 import {
-  AttendanceTypeEnum,
-  useCreateAttendanceMutation,
   UserFieldsFragment,
+  useCreateGradeMutation,
 } from "../../../../../generated/graphql";
 import { useCourse } from "../../../Course";
-import { useLessons } from "../../Lessons";
+import { useExams } from "../../Exams";
 
 type StudentField = {
   id: string;
@@ -13,35 +12,32 @@ type StudentField = {
 };
 
 type Props = {
-  lessonId: string;
+  examId: string;
 };
 
-const Attendances = ({ lessonId }: Props) => {
+const Grades = ({ examId }: Props) => {
   const course = useCourse();
-  const lessons = useLessons();
-  const lesson = lessons.find(({ id }) => id === lessonId);
-  const [createAttendance] = useCreateAttendanceMutation({
-    refetchQueries: ["lessons"],
+  const exams = useExams();
+  const exam = exams.find(({ id }) => id === examId);
+  const [createGrade] = useCreateGradeMutation({
+    refetchQueries: ["exams"],
   });
   const { students } = course.group;
 
-  const attendanceTypes = Object.values(AttendanceTypeEnum);
-
-  const setDefaultAttendance = (id: string) => {
-    const foundAttendance = lesson?.attendances.find(
+  const setDefaultGrade = (id: string) => {
+    const foundAttendance = exam?.grades.find(
       ({ student }) => student?.id === id
     );
 
-    return foundAttendance?.type || AttendanceTypeEnum.Absent;
+    return foundAttendance?.value || 0;
   };
 
   return (
     <>
       <List<StudentField>
-        size="large"
         header={
           <Typography.Title level={5} style={{ margin: 0 }}>
-            Obecność
+            Oceny
           </Typography.Title>
         }
         bordered
@@ -55,17 +51,17 @@ const Attendances = ({ lessonId }: Props) => {
                 </div>
               }
             />
-            <Segmented
-              defaultValue={setDefaultAttendance(id)}
+            <Rate
+              defaultValue={setDefaultGrade(id)}
+              character={({ index }) => <span>{index! + 1}</span>}
+              count={6}
               onChange={(value) => {
-                const type = value as AttendanceTypeEnum;
-                createAttendance({
+                createGrade({
                   variables: {
-                    createAttendanceInput: { lessonId, studentId: id, type },
+                    createGradeInput: { examId, studentId: id, value },
                   },
                 });
               }}
-              options={attendanceTypes}
             />
           </List.Item>
         )}
@@ -74,4 +70,4 @@ const Attendances = ({ lessonId }: Props) => {
   );
 };
 
-export default Attendances;
+export default Grades;

@@ -1,0 +1,5 @@
+mutation createGrade($createGradeInput: CreateGradeInput!) {
+  createGrade(createGradeInput: $createGradeInput) {
+    id
+  }
+}

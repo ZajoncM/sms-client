@@ -53,6 +53,13 @@ export type CreateCourseInput = {
 export type CreateExamInput = {
   courseId: Scalars['String'];
   name: Scalars['String'];
+  weight: Scalars['Int'];
+};
+
+export type CreateGradeInput = {
+  examId: Scalars['String'];
+  studentId: Scalars['String'];
+  value: Scalars['Int'];
 };
 
 export type CreateGroupInput = {
@@ -64,7 +71,7 @@ export type CreateGroupInput = {
 
 export type CreateLessonInput = {
   courseId: Scalars['String'];
-  description: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
 };
 
@@ -79,8 +86,18 @@ export type CreateUserInput = {
 export type Exam = {
   __typename?: 'Exam';
   course: Scalars['String'];
+  grades: Array<Grade>;
   id: Scalars['ID'];
   name: Scalars['String'];
+  weight: Scalars['Int'];
+};
+
+export type Grade = {
+  __typename?: 'Grade';
+  exam: Exam;
+  id: Scalars['ID'];
+  student: Student;
+  value: Scalars['Int'];
 };
 
 export type Group = {
@@ -97,7 +114,7 @@ export type Lesson = {
   __typename?: 'Lesson';
   attendances: Array<Attendance>;
   course: Course;
-  description: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   name: Scalars['String'];
 };
@@ -107,18 +124,21 @@ export type Mutation = {
   createAttendance: Attendance;
   createCourse: Course;
   createExam: Exam;
+  createGrade: Grade;
   createGroup: Group;
   createLesson: Lesson;
   createUser: User;
   removeAttendance: Attendance;
   removeCourse: Course;
   removeExam: Exam;
+  removeGrade: Grade;
   removeGroup: Group;
   removeLesson: Lesson;
   removeUser: User;
   updateAttendance: Attendance;
   updateCourse: Course;
   updateExam: Exam;
+  updateGrade: Grade;
   updateGroup: Group;
   updateLesson: Lesson;
   updateUser: User;
@@ -137,6 +157,11 @@ export type MutationCreateCourseArgs = {
 
 export type MutationCreateExamArgs = {
   createExamInput: CreateExamInput;
+};
+
+
+export type MutationCreateGradeArgs = {
+  createGradeInput: CreateGradeInput;
 };
 
 
@@ -166,6 +191,11 @@ export type MutationRemoveCourseArgs = {
 
 
 export type MutationRemoveExamArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationRemoveGradeArgs = {
   id: Scalars['Int'];
 };
 
@@ -201,6 +231,11 @@ export type MutationUpdateExamArgs = {
 };
 
 
+export type MutationUpdateGradeArgs = {
+  updateGradeInput: UpdateGradeInput;
+};
+
+
 export type MutationUpdateGroupArgs = {
   updateGroupInput: UpdateGroupInput;
 };
@@ -229,6 +264,8 @@ export type Query = {
   currentUser: User;
   exam: Exam;
   exams: Array<Exam>;
+  grade: Grade;
+  grades: Array<Grade>;
   group: Group;
   groups: Array<Group>;
   lesson: Lesson;
@@ -268,6 +305,16 @@ export type QueryExamsArgs = {
 };
 
 
+export type QueryGradeArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryGradesArgs = {
+  gradeDto?: InputMaybe<UpdateGradeInput>;
+};
+
+
 export type QueryGroupArgs = {
   id: Scalars['Int'];
 };
@@ -295,6 +342,7 @@ export type QueryUsersArgs = {
 export type Student = {
   __typename?: 'Student';
   attendances?: Maybe<Array<Attendance>>;
+  grades?: Maybe<Array<Grade>>;
   group: Group;
   id: Scalars['ID'];
   user: User;
@@ -325,6 +373,14 @@ export type UpdateExamInput = {
   courseId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
+  weight?: InputMaybe<Scalars['Int']>;
+};
+
+export type UpdateGradeInput = {
+  examId?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  studentId?: InputMaybe<Scalars['String']>;
+  value?: InputMaybe<Scalars['Int']>;
 };
 
 export type UpdateGroupInput = {
@@ -389,8 +445,17 @@ export type CourseEntity = {
 
 export type ExamEntity = {
   course: Scalars['String'];
+  grades: Array<GradeEntity>;
   id: Scalars['ID'];
   name: Scalars['String'];
+  weight: Scalars['Int'];
+};
+
+export type GradeEntity = {
+  exam: ExamEntity;
+  id: Scalars['ID'];
+  student: StudentEntity;
+  value: Scalars['Int'];
 };
 
 export type GroupEntity = {
@@ -405,7 +470,7 @@ export type GroupEntity = {
 export type LessonEntity = {
   attendances: Array<AttendanceEntity>;
   course: CourseEntity;
-  description: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
   name: Scalars['String'];
 };
@@ -416,6 +481,7 @@ export type ParentEntity = {
 
 export type StudentEntity = {
   attendances?: InputMaybe<Array<AttendanceEntity>>;
+  grades?: InputMaybe<Array<GradeEntity>>;
   group: GroupEntity;
   id: Scalars['ID'];
   user: UserEntity;
@@ -440,6 +506,20 @@ export type UserEntity = {
   teacher?: InputMaybe<TeacherEntity>;
 };
 
+export type CreateGradeMutationVariables = Exact<{
+  createGradeInput: CreateGradeInput;
+}>;
+
+
+export type CreateGradeMutation = { __typename?: 'Mutation', createGrade: { __typename?: 'Grade', id: string } };
+
+export type GradesQueryVariables = Exact<{
+  gradeDto: UpdateGradeInput;
+}>;
+
+
+export type GradesQuery = { __typename?: 'Query', grades: Array<{ __typename?: 'Grade', id: string, value: number, student: { __typename?: 'Student', id: string } }> };
+
 export type CreateExamMutationVariables = Exact<{
   createExamInput: CreateExamInput;
 }>;
@@ -459,9 +539,9 @@ export type ExamsQueryVariables = Exact<{
 }>;
 
 
-export type ExamsQuery = { __typename?: 'Query', exams: Array<{ __typename?: 'Exam', id: string, name: string }> };
+export type ExamsQuery = { __typename?: 'Query', exams: Array<{ __typename?: 'Exam', id: string, name: string, weight: number, grades: Array<{ __typename?: 'Grade', value: number, student: { __typename?: 'Student', id: string } }> }> };
 
-export type ExamFieldsFragment = { __typename?: 'Exam', id: string, name: string };
+export type ExamFieldsFragment = { __typename?: 'Exam', id: string, name: string, weight: number, grades: Array<{ __typename?: 'Grade', value: number, student: { __typename?: 'Student', id: string } }> };
 
 export type CreateAttendanceMutationVariables = Exact<{
   createAttendanceInput: CreateAttendanceInput;
@@ -496,9 +576,9 @@ export type LessonsQueryVariables = Exact<{
 }>;
 
 
-export type LessonsQuery = { __typename?: 'Query', lessons: Array<{ __typename?: 'Lesson', id: string, name: string, description: string, attendances: Array<{ __typename?: 'Attendance', id: string, type: AttendanceTypeEnum, student: { __typename?: 'Student', id: string } }> }> };
+export type LessonsQuery = { __typename?: 'Query', lessons: Array<{ __typename?: 'Lesson', id: string, name: string, description?: string | null, attendances: Array<{ __typename?: 'Attendance', id: string, type: AttendanceTypeEnum, student: { __typename?: 'Student', id: string } }> }> };
 
-export type LessonFieldsFragment = { __typename?: 'Lesson', id: string, name: string, description: string, attendances: Array<{ __typename?: 'Attendance', id: string, type: AttendanceTypeEnum, student: { __typename?: 'Student', id: string } }> };
+export type LessonFieldsFragment = { __typename?: 'Lesson', id: string, name: string, description?: string | null, attendances: Array<{ __typename?: 'Attendance', id: string, type: AttendanceTypeEnum, student: { __typename?: 'Student', id: string } }> };
 
 export type CourseQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -627,6 +707,13 @@ export const ExamFieldsFragmentDoc = gql`
     fragment ExamFields on Exam {
   id
   name
+  weight
+  grades {
+    value
+    student {
+      id
+    }
+  }
 }
     `;
 export const LessonFieldsFragmentDoc = gql`
@@ -706,6 +793,78 @@ export const GroupFieldsFragmentDoc = gql`
 }
     ${UserFieldsFragmentDoc}
 ${CourseFieldsFragmentDoc}`;
+export const CreateGradeDocument = gql`
+    mutation createGrade($createGradeInput: CreateGradeInput!) {
+  createGrade(createGradeInput: $createGradeInput) {
+    id
+  }
+}
+    `;
+export type CreateGradeMutationFn = Apollo.MutationFunction<CreateGradeMutation, CreateGradeMutationVariables>;
+
+/**
+ * __useCreateGradeMutation__
+ *
+ * To run a mutation, you first call `useCreateGradeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateGradeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createGradeMutation, { data, loading, error }] = useCreateGradeMutation({
+ *   variables: {
+ *      createGradeInput: // value for 'createGradeInput'
+ *   },
+ * });
+ */
+export function useCreateGradeMutation(baseOptions?: Apollo.MutationHookOptions<CreateGradeMutation, CreateGradeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateGradeMutation, CreateGradeMutationVariables>(CreateGradeDocument, options);
+      }
+export type CreateGradeMutationHookResult = ReturnType<typeof useCreateGradeMutation>;
+export type CreateGradeMutationResult = Apollo.MutationResult<CreateGradeMutation>;
+export type CreateGradeMutationOptions = Apollo.BaseMutationOptions<CreateGradeMutation, CreateGradeMutationVariables>;
+export const GradesDocument = gql`
+    query grades($gradeDto: UpdateGradeInput!) {
+  grades(gradeDto: $gradeDto) {
+    id
+    value
+    student {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGradesQuery__
+ *
+ * To run a query within a React component, call `useGradesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGradesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGradesQuery({
+ *   variables: {
+ *      gradeDto: // value for 'gradeDto'
+ *   },
+ * });
+ */
+export function useGradesQuery(baseOptions: Apollo.QueryHookOptions<GradesQuery, GradesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GradesQuery, GradesQueryVariables>(GradesDocument, options);
+      }
+export function useGradesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GradesQuery, GradesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GradesQuery, GradesQueryVariables>(GradesDocument, options);
+        }
+export type GradesQueryHookResult = ReturnType<typeof useGradesQuery>;
+export type GradesLazyQueryHookResult = ReturnType<typeof useGradesLazyQuery>;
+export type GradesQueryResult = Apollo.QueryResult<GradesQuery, GradesQueryVariables>;
 export const CreateExamDocument = gql`
     mutation createExam($createExamInput: CreateExamInput!) {
   createExam(createExamInput: $createExamInput) {
