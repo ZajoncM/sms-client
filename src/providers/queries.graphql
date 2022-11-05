@@ -1,5 +1,31 @@
 query me {
   currentUser {
     ...UserFields
+    courses {
+      ...CourseDetailsFields
+    }
+  }
+}
+
+fragment CourseDetailsFields on Course {
+  id
+  name
+  exams {
+    grades {
+      id
+      value
+      student {
+        id
+      }
+    }
+  }
+  lessons {
+    attendances {
+      id
+      type
+      student {
+        id
+      }
+    }
   }
 }

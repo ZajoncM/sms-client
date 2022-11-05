@@ -8,4 +8,8 @@ fragment UserFields on User {
   teacher {
     id
   }
+
+  student {
+    id
+  }
 }

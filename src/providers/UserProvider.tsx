@@ -14,6 +14,8 @@ const UserProvider = ({ children }: ProviderProps) => {
 
   if (loading) return <div>loading</div>;
 
+  console.log(data);
+
   return (
     <UserContext.Provider value={data?.currentUser}>
       {children}

@@ -329,6 +329,18 @@
             "deprecationReason": null
           },
           {
+            "name": "studentId",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "teacherId",
             "description": null,
             "type": {
@@ -2633,6 +2645,18 @@
             "deprecationReason": null
           },
           {
+            "name": "studentId",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "teacherId",
             "description": null,
             "type": {
@@ -2993,6 +3017,30 @@
         "name": "User",
         "description": null,
         "fields": [
+          {
+            "name": "courses",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Course",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "email",
             "description": null,
