@@ -30,9 +30,9 @@ const GroupList = () => {
       title: "Wychowawca",
       dataIndex: "educator",
       key: "educator",
-      render: ({ user }) => (
+      render: (educator) => (
         <div>
-          {user.firstName} {user.lastName}
+          {educator?.user.firstName} {educator?.user.lastName}
         </div>
       ),
     },

@@ -30,7 +30,7 @@ const StudentLessons = ({ lessons }: Props) => {
       renderItem={(lesson) => (
         <List.Item>
           <List.Item.Meta title={lesson.name} />
-          <div> {lessonTypes[lesson.attendance?.type!]}</div>
+          <div>{lessonTypes[lesson.attendance?.type!]}</div>
         </List.Item>
       )}
     />
