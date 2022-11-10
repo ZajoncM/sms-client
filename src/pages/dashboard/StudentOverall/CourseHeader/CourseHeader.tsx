@@ -17,8 +17,6 @@ const CourseHeader = ({ course }: Props) => {
 
   const average = myGrades.reduce((a, b) => a + b, 0) / myGrades.length;
 
-  console.log(average);
-
   const averagePercent = (average * 100) / 6;
 
   return (
@@ -27,7 +25,7 @@ const CourseHeader = ({ course }: Props) => {
       <Progress
         type="circle"
         percent={averagePercent}
-        format={() => average || 0}
+        format={() => (average ? average.toPrecision(3) : 0)}
         width={30}
       />
     </div>

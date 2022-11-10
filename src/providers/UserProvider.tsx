@@ -1,7 +1,7 @@
 import { createContext, PropsWithChildren, useContext } from "react";
-import { useMeQuery, UserFieldsFragment } from "../generated/graphql";
+import { MeFieldsFragment, useMeQuery } from "../generated/graphql";
 
-const UserContext = createContext<UserFieldsFragment | undefined>(undefined);
+const UserContext = createContext<MeFieldsFragment | undefined>(undefined);
 
 export const useUserContext = () => {
   return useContext(UserContext);
@@ -13,8 +13,6 @@ const UserProvider = ({ children }: ProviderProps) => {
   const { data, loading } = useMeQuery();
 
   if (loading) return <div>loading</div>;
-
-  console.log(data);
 
   return (
     <UserContext.Provider value={data?.currentUser}>

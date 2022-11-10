@@ -1,9 +1,13 @@
 query me {
   currentUser {
-    ...UserFields
-    courses {
-      ...CourseDetailsFields
-    }
+    ...MeFields
+  }
+}
+
+fragment MeFields on User {
+  ...UserFields
+  courses {
+    ...CourseDetailsFields
   }
 }
 
@@ -11,21 +15,9 @@ fragment CourseDetailsFields on Course {
   id
   name
   exams {
-    grades {
-      id
-      value
-      student {
-        id
-      }
-    }
+    ...ExamFields
   }
   lessons {
-    attendances {
-      id
-      type
-      student {
-        id
-      }
-    }
+    ...LessonFields
   }
 }

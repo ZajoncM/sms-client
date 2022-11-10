@@ -704,37 +704,12 @@ export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'Us
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, courses: Array<{ __typename?: 'Course', id: string, name: string, exams: Array<{ __typename?: 'Exam', grades: Array<{ __typename?: 'Grade', id: string, value: number, student: { __typename?: 'Student', id: string } }> }>, lessons: Array<{ __typename?: 'Lesson', attendances: Array<{ __typename?: 'Attendance', id: string, type: AttendanceTypeEnum, student: { __typename?: 'Student', id: string } }> }> }>, teacher?: { __typename?: 'Teacher', id: string } | null, student?: { __typename?: 'Student', id: string } | null } };
+export type MeQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, courses: Array<{ __typename?: 'Course', id: string, name: string, exams: Array<{ __typename?: 'Exam', id: string, name: string, weight: number, grades: Array<{ __typename?: 'Grade', value: number, student: { __typename?: 'Student', id: string } }> }>, lessons: Array<{ __typename?: 'Lesson', id: string, name: string, description?: string | null, attendances: Array<{ __typename?: 'Attendance', id: string, type: AttendanceTypeEnum, student: { __typename?: 'Student', id: string } }> }> }>, teacher?: { __typename?: 'Teacher', id: string } | null, student?: { __typename?: 'Student', id: string } | null } };
 
-export type CourseDetailsFieldsFragment = { __typename?: 'Course', id: string, name: string, exams: Array<{ __typename?: 'Exam', grades: Array<{ __typename?: 'Grade', id: string, value: number, student: { __typename?: 'Student', id: string } }> }>, lessons: Array<{ __typename?: 'Lesson', attendances: Array<{ __typename?: 'Attendance', id: string, type: AttendanceTypeEnum, student: { __typename?: 'Student', id: string } }> }> };
+export type MeFieldsFragment = { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, courses: Array<{ __typename?: 'Course', id: string, name: string, exams: Array<{ __typename?: 'Exam', id: string, name: string, weight: number, grades: Array<{ __typename?: 'Grade', value: number, student: { __typename?: 'Student', id: string } }> }>, lessons: Array<{ __typename?: 'Lesson', id: string, name: string, description?: string | null, attendances: Array<{ __typename?: 'Attendance', id: string, type: AttendanceTypeEnum, student: { __typename?: 'Student', id: string } }> }> }>, teacher?: { __typename?: 'Teacher', id: string } | null, student?: { __typename?: 'Student', id: string } | null };
 
-export const ExamFieldsFragmentDoc = gql`
-    fragment ExamFields on Exam {
-  id
-  name
-  weight
-  grades {
-    value
-    student {
-      id
-    }
-  }
-}
-    `;
-export const LessonFieldsFragmentDoc = gql`
-    fragment LessonFields on Lesson {
-  id
-  name
-  description
-  attendances {
-    id
-    type
-    student {
-      id
-    }
-  }
-}
-    `;
+export type CourseDetailsFieldsFragment = { __typename?: 'Course', id: string, name: string, exams: Array<{ __typename?: 'Exam', id: string, name: string, weight: number, grades: Array<{ __typename?: 'Grade', value: number, student: { __typename?: 'Student', id: string } }> }>, lessons: Array<{ __typename?: 'Lesson', id: string, name: string, description?: string | null, attendances: Array<{ __typename?: 'Attendance', id: string, type: AttendanceTypeEnum, student: { __typename?: 'Student', id: string } }> }> };
+
 export const UserFieldsFragmentDoc = gql`
     fragment UserFields on User {
   id
@@ -801,30 +776,55 @@ export const GroupFieldsFragmentDoc = gql`
 }
     ${UserFieldsFragmentDoc}
 ${CourseFieldsFragmentDoc}`;
+export const ExamFieldsFragmentDoc = gql`
+    fragment ExamFields on Exam {
+  id
+  name
+  weight
+  grades {
+    value
+    student {
+      id
+    }
+  }
+}
+    `;
+export const LessonFieldsFragmentDoc = gql`
+    fragment LessonFields on Lesson {
+  id
+  name
+  description
+  attendances {
+    id
+    type
+    student {
+      id
+    }
+  }
+}
+    `;
 export const CourseDetailsFieldsFragmentDoc = gql`
     fragment CourseDetailsFields on Course {
   id
   name
   exams {
-    grades {
-      id
-      value
-      student {
-        id
-      }
-    }
+    ...ExamFields
   }
   lessons {
-    attendances {
-      id
-      type
-      student {
-        id
-      }
-    }
+    ...LessonFields
   }
 }
-    `;
+    ${ExamFieldsFragmentDoc}
+${LessonFieldsFragmentDoc}`;
+export const MeFieldsFragmentDoc = gql`
+    fragment MeFields on User {
+  ...UserFields
+  courses {
+    ...CourseDetailsFields
+  }
+}
+    ${UserFieldsFragmentDoc}
+${CourseDetailsFieldsFragmentDoc}`;
 export const CreateGradeDocument = gql`
     mutation createGrade($createGradeInput: CreateGradeInput!) {
   createGrade(createGradeInput: $createGradeInput) {
@@ -1754,14 +1754,10 @@ export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariable
 export const MeDocument = gql`
     query me {
   currentUser {
-    ...UserFields
-    courses {
-      ...CourseDetailsFields
-    }
+    ...MeFields
   }
 }
-    ${UserFieldsFragmentDoc}
-${CourseDetailsFieldsFragmentDoc}`;
+    ${MeFieldsFragmentDoc}`;
 
 /**
  * __useMeQuery__
