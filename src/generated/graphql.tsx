@@ -253,6 +253,7 @@ export type MutationUpdateUserArgs = {
 
 export type Parent = {
   __typename?: 'Parent';
+  children: Array<Student>;
   id: Scalars['ID'];
 };
 
@@ -271,6 +272,7 @@ export type Query = {
   groups: Array<Group>;
   lesson: Lesson;
   lessons: Array<Lesson>;
+  parent: Parent;
   user: User;
   users: Array<User>;
 };
@@ -479,6 +481,7 @@ export type LessonEntity = {
 };
 
 export type ParentEntity = {
+  children: Array<StudentEntity>;
   id: Scalars['ID'];
 };
 
@@ -596,6 +599,11 @@ export type CoursesQueryVariables = Exact<{
 
 
 export type CoursesQuery = { __typename?: 'Query', courses: Array<{ __typename?: 'Course', id: string, name: string, teacher?: { __typename?: 'Teacher', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null, student?: { __typename?: 'Student', id: string } | null } } | null, group: { __typename?: 'Group', id: string, name: string, semester: number, students: Array<{ __typename?: 'Student', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null, student?: { __typename?: 'Student', id: string } | null }, attendances?: Array<{ __typename?: 'Attendance', lesson: { __typename?: 'Lesson', id: string } }> | null }> } }> };
+
+export type ParentQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ParentQuery = { __typename?: 'Query', parent: { __typename?: 'Parent', id: string, children: Array<{ __typename?: 'Student', id: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRoleEnum, teacher?: { __typename?: 'Teacher', id: string } | null, student?: { __typename?: 'Student', id: string } | null }, attendances?: Array<{ __typename?: 'Attendance', id: string, type: AttendanceTypeEnum, lesson: { __typename?: 'Lesson', id: string, name: string } }> | null, grades?: Array<{ __typename?: 'Grade', id: string, value: number, exam: { __typename?: 'Exam', id: string, name: string } }> | null }> } };
 
 export type CreateGroupMutationVariables = Exact<{
   createGroupInput: CreateGroupInput;
@@ -1241,6 +1249,62 @@ export function useCoursesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Co
 export type CoursesQueryHookResult = ReturnType<typeof useCoursesQuery>;
 export type CoursesLazyQueryHookResult = ReturnType<typeof useCoursesLazyQuery>;
 export type CoursesQueryResult = Apollo.QueryResult<CoursesQuery, CoursesQueryVariables>;
+export const ParentDocument = gql`
+    query parent {
+  parent {
+    id
+    children {
+      id
+      user {
+        ...UserFields
+      }
+      attendances {
+        id
+        type
+        lesson {
+          id
+          name
+        }
+      }
+      grades {
+        id
+        value
+        exam {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+    ${UserFieldsFragmentDoc}`;
+
+/**
+ * __useParentQuery__
+ *
+ * To run a query within a React component, call `useParentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useParentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useParentQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useParentQuery(baseOptions?: Apollo.QueryHookOptions<ParentQuery, ParentQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ParentQuery, ParentQueryVariables>(ParentDocument, options);
+      }
+export function useParentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ParentQuery, ParentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ParentQuery, ParentQueryVariables>(ParentDocument, options);
+        }
+export type ParentQueryHookResult = ReturnType<typeof useParentQuery>;
+export type ParentLazyQueryHookResult = ReturnType<typeof useParentLazyQuery>;
+export type ParentQueryResult = Apollo.QueryResult<ParentQuery, ParentQueryVariables>;
 export const CreateGroupDocument = gql`
     mutation createGroup($createGroupInput: CreateGroupInput!) {
   createGroup(createGroupInput: $createGroupInput) {

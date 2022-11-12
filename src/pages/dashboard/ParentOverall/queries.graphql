@@ -1,0 +1,30 @@
+query parent {
+  parent {
+    id
+
+    children {
+      id
+      user {
+        ...UserFields
+      }
+
+      attendances {
+        id
+        type
+        lesson {
+          id
+          name
+        }
+      }
+
+      grades {
+        id
+        value
+        exam {
+          id
+          name
+        }
+      }
+    }
+  }
+}
