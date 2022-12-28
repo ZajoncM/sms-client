@@ -1,5 +1,6 @@
 import { Card, Collapse, Divider, List, Typography } from "antd";
 import { useParentQuery } from "../../../generated/graphql";
+import { lessonTypes } from "../StudentOverall/CourseDetails/StudentLessons/StudentLessons";
 
 const { Panel } = Collapse;
 
@@ -22,7 +23,7 @@ const ParentOverall = () => {
               dataSource={child?.attendances}
               renderItem={(attendance) => (
                 <List.Item>
-                  {attendance.lesson.name} - {attendance.type}
+                  {attendance.lesson.name} - {lessonTypes[attendance.type]}
                 </List.Item>
               )}
             />

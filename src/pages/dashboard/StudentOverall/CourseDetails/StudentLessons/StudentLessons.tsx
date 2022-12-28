@@ -6,7 +6,7 @@ type Props = {
   lessons: LessonFieldsFragment[];
 };
 
-const lessonTypes = {
+export const lessonTypes = {
   PRESENT: "obecny",
   ABSENT: "nieobecny",
 };

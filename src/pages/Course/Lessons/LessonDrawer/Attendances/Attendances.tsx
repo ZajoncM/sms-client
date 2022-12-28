@@ -4,6 +4,7 @@ import {
   useCreateAttendanceMutation,
   UserFieldsFragment,
 } from "../../../../../generated/graphql";
+import { lessonTypes } from "../../../../Dashboard/StudentOverall/CourseDetails/StudentLessons/StudentLessons";
 import { useCourse } from "../../../Course";
 import { useLessons } from "../../Lessons";
 
@@ -26,6 +27,8 @@ const Attendances = ({ lessonId }: Props) => {
   const { students } = course.group;
 
   const attendanceTypes = Object.values(AttendanceTypeEnum);
+
+  const test = attendanceTypes.map((value) => lessonTypes[value]);
 
   const setDefaultAttendance = (id: string) => {
     const foundAttendance = lesson?.attendances.find(
@@ -65,7 +68,7 @@ const Attendances = ({ lessonId }: Props) => {
                   },
                 });
               }}
-              options={attendanceTypes}
+              options={test}
             />
           </List.Item>
         )}
