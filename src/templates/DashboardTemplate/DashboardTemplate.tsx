@@ -4,18 +4,19 @@ import Sider from "antd/lib/layout/Sider";
 import { PropsWithChildren } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserRoleEnum } from "../../generated/graphql";
-import { useUserContext } from "../../providers/UserProvider";
+
 import NavMenu from "./NavMenu/NavMenu";
+import { useUserContext } from "../../utils/ProtectedRoute";
 
 type Props = PropsWithChildren;
 
 const DashboardTemplate = ({ children }: Props) => {
   const user = useUserContext();
-
   const navigate = useNavigate();
 
   const logout = () => {
     localStorage.removeItem("token");
+
     navigate("/login");
   };
 

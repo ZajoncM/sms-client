@@ -2,7 +2,7 @@ import { UserOutlined, HomeOutlined, CopyOutlined } from "@ant-design/icons";
 import { Menu, MenuProps } from "antd";
 import { useNavigate } from "react-router-dom";
 import { UserRoleEnum } from "../../../generated/graphql";
-import { useUserContext } from "../../../providers/UserProvider";
+import { useUserContext } from "../../../utils/ProtectedRoute";
 
 type MenuItem = Required<MenuProps>["items"][number];
 

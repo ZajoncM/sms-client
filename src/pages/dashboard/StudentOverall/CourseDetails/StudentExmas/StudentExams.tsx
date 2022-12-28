@@ -1,6 +1,6 @@
 import { List } from "antd";
 import { ExamFieldsFragment } from "../../../../../generated/graphql";
-import { useUserContext } from "../../../../../providers/UserProvider";
+import { useUserContext } from "../../../../../utils/ProtectedRoute";
 
 type Props = {
   exams: ExamFieldsFragment[];

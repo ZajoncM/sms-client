@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { UserRoleEnum } from "../generated/graphql";
-import { useUserContext } from "../providers/UserProvider";
+import { useUserContext } from "../utils/ProtectedRoute";
 
 const UserContainer = () => {
   const currentUser = useUserContext();

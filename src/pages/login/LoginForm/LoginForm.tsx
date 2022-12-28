@@ -1,15 +1,19 @@
 import { Button, Card, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../../utils/axios";
+import { useApolloClient } from "@apollo/client";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
+  const client = useApolloClient();
 
   const onFinish = async (values: any) => {
     const { data } = await api.post("/auth/login", values);
-
     localStorage.setItem("token", data.access_token);
-    navigate("/dashboard");
+
+    client.resetStore().then(() => {
+      navigate("/dashboard");
+    });
   };
 
   return (

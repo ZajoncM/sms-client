@@ -4,7 +4,7 @@ import {
   CourseFieldsFragment,
   useCoursesQuery,
 } from "../../../generated/graphql";
-import { useUserContext } from "../../../providers/UserProvider";
+import { useUserContext } from "../../../utils/ProtectedRoute";
 
 const Courses = () => {
   const currentUser = useUserContext();

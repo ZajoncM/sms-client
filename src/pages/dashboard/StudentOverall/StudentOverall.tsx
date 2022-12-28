@@ -1,8 +1,8 @@
 import { Card, Collapse, Typography } from "antd";
 
-import { useUserContext } from "../../../providers/UserProvider";
 import CourseDetails from "./CourseDetails/CourseDetails";
 import CourseHeader from "./CourseHeader/CourseHeader";
+import { useUserContext } from "../../../utils/ProtectedRoute";
 
 const { Panel } = Collapse;
 

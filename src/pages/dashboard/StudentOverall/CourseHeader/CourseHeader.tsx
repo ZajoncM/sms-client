@@ -1,6 +1,6 @@
 import { Progress } from "antd";
 import { CourseDetailsFieldsFragment } from "../../../../generated/graphql";
-import { useUserContext } from "../../../../providers/UserProvider";
+import { useUserContext } from "../../../../utils/ProtectedRoute";
 
 type Props = {
   course: CourseDetailsFieldsFragment;
