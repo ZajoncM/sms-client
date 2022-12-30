@@ -28,8 +28,6 @@ const Attendances = ({ lessonId }: Props) => {
 
   const attendanceTypes = Object.values(AttendanceTypeEnum);
 
-  const test = attendanceTypes.map((value) => lessonTypes[value]);
-
   const setDefaultAttendance = (id: string) => {
     const foundAttendance = lesson?.attendances.find(
       ({ student }) => student?.id === id
@@ -68,7 +66,7 @@ const Attendances = ({ lessonId }: Props) => {
                   },
                 });
               }}
-              options={test}
+              options={attendanceTypes}
             />
           </List.Item>
         )}
